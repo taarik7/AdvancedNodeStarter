@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const debug = require('debug')('models:blog');
 const { Schema } = mongoose;
 
 const blogSchema = new Schema({
