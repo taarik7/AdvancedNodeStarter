@@ -10,9 +10,8 @@ class CustomPage {
     });
 
     const page = await browser.newPage();
+    await page.setBypassCSP(true);
     const customPage = new CustomPage(page);
-
-    await page.setExtraHTTPHeaders({"Content-Security-Policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"});
 
     return new Proxy(customPage, {
       get: function(target, property) {
