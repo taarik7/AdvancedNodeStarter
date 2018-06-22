@@ -5,7 +5,12 @@ let page;
 
 beforeEach(async () => {
   page = await Page.build();
-  // await page.setBypassCSP(true);
+  await page.setExtraHTTPHeaders({
+    'X-Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; options eval-script",
+    'X-WebKit-CSP': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'",
+    'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
+  })
+  await page.setBypassCSP(true);
   await page.goto('http://localhost:3000');
 });
 
