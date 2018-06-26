@@ -10,7 +10,7 @@ beforeEach(async () => {
     'X-WebKit-CSP': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'",
     'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
   });
-  await page.setBypassCSP(true);
+  // await page.setBypassCSP(true);
   await page.goto('http://localhost:3000');
 });
 
@@ -21,11 +21,11 @@ afterEach(async () => {
 test('The header has the correct text', async () => {
   debug('[ Running Test 1 ]');
 
-  const text = await page.evaluate(() => document.querySelector('a.brand-logo').textContent);
+  // const text = await page.evaluate(() => document.querySelector('a.brand-logo').textContent);
   // const text = await page.getContentsOf('a.brand-logo');
-  // const xpath = "//*[@id=\"root\"]/div/div/nav/div/a";
-  // const element = await page.$x(xpath);
-  // let text = await page.evaluate(elem => elem.textContent, element[0]);
+  const xpath = "//*[@id=\"root\"]/div/div/nav/div/a";
+  const element = await page.$x(xpath);
+  let text = await page.evaluate(elem => elem.textContent, element[0]);
   debug('[ - text: %s ]', text);
 
   expect(text).toEqual('Blogster');
@@ -46,12 +46,12 @@ test('When signed in, shows logout button', async () => {
   debug('[ Running Test 3 ]');
   await page.login();
 
-  const text = await page.evaluate(() => document.querySelector('a[href="/auth/logout"]').textContent);
+  // const text = await page.evaluate(() => document.querySelector('a[href="/auth/logout"]').textContent);
 
   // const text = await page.getContentsOf('a[href="/auth/logout"]');
-  // const xpath = "//*[@id=\"root\"]/div/div/nav/div/ul/li[2]/a";
-  // const element = await page.$x(xpath);
-  // let text = await page.evaluate(elem => elem.textContent, element[0]);
+  const xpath = "//*[@id=\"root\"]/div/div/nav/div/ul/li[2]/a";
+  const element = await page.$x(xpath);
+  let text = await page.evaluate(elem => elem.textContent, element[0]);
   debug('[ - text: %s ]', text);
 
   expect(text).toEqual('Logout');
