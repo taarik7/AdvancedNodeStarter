@@ -4,13 +4,13 @@ const Page = require('./helpers/page');
 let page;
 
 beforeEach(async () => {
-  page = await Page.build();
-  // await page.setBypassCSP(true);
+  page = await Page.build(); 
   await page.setExtraHTTPHeaders({
     'X-Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; options eval-script",
     'X-WebKit-CSP': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'",
     'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'"
   });
+  // await page.setBypassCSP(true);
   await page.goto('http://localhost:3000');
 });
 
@@ -26,11 +26,8 @@ describe('When logged in', async () => {
 
   test('Can see blog create form', async () => {
     debug('[ Running Test 1 ]');
-
-    const label = await page.evaluate(() => document.querySelector('form label').textContent);
-    // let xpath = '//*[@id="root"]/div/div/div/div/form/div[1]/label';
-    // let element = await page.$x(xpath);
-    // let label = await page.evaluate(elem => elem.textContent, element[0]);
+    const label = await page.getContentsOf('form label');
+    debug({ label });
     expect(label).toEqual('Blog Title');
   });
 
@@ -44,12 +41,8 @@ describe('When logged in', async () => {
     test('Submitting takes user to review screen', async () => {
       debug('[ submitting takes user to review screen ]');
 
-      const text = await page.evaluate(() => document.querySelector('h5').textContent);
-
-      // let xpath = '//*[@id="root"]/div/div/div/form/h5';
-      // let element = await page.$x(xpath);
-      // let text = await page.evaluate(elem => elem.textContent, element[0]);
-
+      const text = await page.getContentsOf('h5');
+      debug({ text });
       expect(text).toEqual('Please confirm your entries');
     });
 
@@ -58,19 +51,12 @@ describe('When logged in', async () => {
       await page.click('button.green');
       await page.waitFor('.card', { timeout: 5000 });
 
-      const title = await page.evaluate(() => document.querySelector('.card-title').textContent);
-      const content = await page.evaluate(() => document.querySelector('p').textContent);
-
-      // let xpath = '//*[@id="root"]/div/div/div/form/div[1]/div';
-      // let element = await page.$x(xpath);
-      // const title = await page.evaluate(elem => elem.textContent, element[0]);
-
-      // xpath = '//*[@id="root"]/div/div/div/form/div[2]/div';
-      // element = await page.$x(xpath);
-      // const content = await page.evaluate(elem => elem.textContent, element[0]);
+      const title = await page.getContentsOf('.card-title');
+      const content = await page.getContentsOf('p');
+      debug({ title, content });
 
       expect(title).toEqual('My Title');
-      // expect(content).toEqual('My Content');
+      expect(content).toEqual('My Content');
     });
   });
 
@@ -82,16 +68,9 @@ describe('When logged in', async () => {
     test('The form shows an error message', async () => {
       debug('[ And using invalid inputs ]');
 
-      const titleError = await page.evaluate(() => document.querySelector('.title .red-text').textContent);
-      const contentError = await page.evaluate(() => document.querySelector('.content .red-text').textContent);
-
-      // let xpath = '//*[@id="root"]/div/div/div/div/form/div[1]/div';
-      // let element = await page.$x(xpath);
-      // const titleError = await page.evaluate(elem => elem.textContent, element[0]);
-
-      // xpath = '//*[@id="root"]/div/div/div/div/form/div[2]/div';
-      // element = await page.$x(xpath);
-      // const contentError = await page.evaluate(elem => elem.textContent, element[0]);
+      const titleError = await page.getContentsOf('.title .red-text');
+      const contentError = await page.getContentsOf('.content .red-text');
+      debug({ titleError, contentError });
 
       expect(titleError).toEqual('You must provide a value');
       expect(contentError).toEqual('You must provide a value');

@@ -35,16 +35,7 @@ class CustomPage {
   }
 
   async getContentsOf(selector) {
-    let elem = await this.page.$x('//' + selector);
-
-    let innards = await this.page.evaluate(selector => b2.textContent, elem[0]);
-    debug('innards %s', innards);
-
-    return innards;
-
-    return this.page.evaluate((bo_selectah) => document.querySelector(bo_selectah).textContent);
-
-    // return this.page.$eval(selector, el => el.innerHTML);
+    return this.page.$eval(selector, el => el.innerHTML);
   }
 
   get(path) {

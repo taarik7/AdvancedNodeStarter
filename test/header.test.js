@@ -20,13 +20,8 @@ afterEach(async () => {
 
 test('The header has the correct text', async () => {
   debug('[ Running Test 1 ]');
-
-  // const text = await page.evaluate(() => document.querySelector('a.brand-logo').textContent);
-  // const text = await page.getContentsOf('a.brand-logo');
-  const xpath = "//*[@id=\"root\"]/div/div/nav/div/a";
-  const element = await page.$x(xpath);
-  let text = await page.evaluate(elem => elem.textContent, element[0]);
-  debug('[ - text: %s ]', text);
+  const text = await page.getContentsOf('a.brand-logo');
+  debug({ text });
 
   expect(text).toEqual('Blogster');
 });
@@ -37,7 +32,7 @@ test('Clicking login starts oauth flow', async () => {
   await page.click('.right a');
 
   const url = await page.url();
-  debug('[ - url: %s ]', url.substring(0,50));
+  debug({ url });
 
   expect(url).toMatch(/accounts\.google\.com/);
 });
@@ -46,13 +41,8 @@ test('When signed in, shows logout button', async () => {
   debug('[ Running Test 3 ]');
   await page.login();
 
-  // const text = await page.evaluate(() => document.querySelector('a[href="/auth/logout"]').textContent);
-
-  // const text = await page.getContentsOf('a[href="/auth/logout"]');
-  const xpath = "//*[@id=\"root\"]/div/div/nav/div/ul/li[2]/a";
-  const element = await page.$x(xpath);
-  let text = await page.evaluate(elem => elem.textContent, element[0]);
-  debug('[ - text: %s ]', text);
+  const text = await page.getContentsOf('a[href="/auth/logout"]');
+  debug({ text });
 
   expect(text).toEqual('Logout');
 });
